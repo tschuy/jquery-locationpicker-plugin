@@ -219,8 +219,9 @@
             }
             if (inputBinding.latitudeInput) {
                 inputBinding.latitudeInput.on("change", function(e) {
-                    if (!e.originalEvent) { return }
-                    GmUtility.setPosition(gmapContext, new google.maps.LatLng($(this).val(), gmapContext.location.lng()), function(context){
+                    var latitude_input = $(this).val();
+                    if (!e.originalEvent || isNaN(latitude_input) ) { return }
+                    GmUtility.setPosition(gmapContext, new google.maps.LatLng(latitude_input, gmapContext.location.lng()), function(context){
                         context.settings.onchanged.apply(gmapContext.domContainer,
                             [GmUtility.locationFromLatLng(context.location), context.radius, false]);
                     });
@@ -228,8 +229,9 @@
             }
             if (inputBinding.longitudeInput) {
                 inputBinding.longitudeInput.on("change", function(e) {
-                    if (!e.originalEvent) { return }
-                    GmUtility.setPosition(gmapContext, new google.maps.LatLng(gmapContext.location.lat(), $(this).val()), function(context){
+                    var longitude_input = $(this).val();
+                    if (!e.originalEvent || isNaN(longitude_input) ) { return }
+                    GmUtility.setPosition(gmapContext, new google.maps.LatLng(gmapContext.location.lat(), longitude_input), function(context){
                         context.settings.onchanged.apply(gmapContext.domContainer,
                             [GmUtility.locationFromLatLng(context.location), context.radius, false]);
                     });
@@ -253,7 +255,7 @@
             latOld = gmapContext.settings.location.latitude,
             lngOld = gmapContext.settings.location.longitude,
             radiusOld = gmapContext.settings.radius;
-        
+
         if (latNew == latOld && lngNew == lngOld && radiusNew == radiusOld)
         return;
 
@@ -346,8 +348,8 @@
             // If plug-in hasn't been applied before - initialize, otherwise - skip
             if (isPluginApplied(this)){
               updateMap(getContextForElement(this), $(this), options);
-              return;  
-            } 
+              return;
+            }
             // Plug-in initialization is required
             // Defaults
             var settings = $.extend({}, $.fn.locationpicker.defaults, options );
